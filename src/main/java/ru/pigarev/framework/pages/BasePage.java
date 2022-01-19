@@ -62,7 +62,7 @@ public class BasePage {
 
     public int getItemPrice(String priceStr) {
         String strPrice = priceStr.split("₽")[0];
-        System.out.println(strPrice);
+//        System.out.println(strPrice);
 //        float price = Float.parseFloat(strPrice);
 //        double value = Double.parseDouble(strPrice);
 //        BigDecimal price = new BigDecimal(value).setScale(2);

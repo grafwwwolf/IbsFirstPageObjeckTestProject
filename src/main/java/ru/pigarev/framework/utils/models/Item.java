@@ -11,6 +11,18 @@ public class Item extends AbstractProduct {
         this.name = item.name;
         this.price = item.price;
         this.waranty = item.waranty;
-        this.priceWithWaranty = item.priceWithWaranty;
+        this.warantyPrice = item.warantyPrice;
+        this.totalPrice = item.totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", waranty=" + waranty +
+                ", warantyPrice=" + warantyPrice +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }

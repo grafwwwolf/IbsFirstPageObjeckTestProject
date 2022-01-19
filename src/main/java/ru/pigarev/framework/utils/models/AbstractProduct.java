@@ -4,7 +4,9 @@ public class AbstractProduct {
     protected String name;
     protected int price;
     protected int waranty;
-    protected int priceWithWaranty;
+    protected int warantyPrice;
+    protected int totalPrice;
+
 
     public String getName() {
         return name;
@@ -14,8 +16,8 @@ public class AbstractProduct {
         return price;
     }
 
-    public int getPriceWithWaranty() {
-        return priceWithWaranty;
+    public int getwarantyPrice() {
+        return warantyPrice;
     }
 
     public void setName(String name) {
@@ -26,12 +28,20 @@ public class AbstractProduct {
         this.price = price;
     }
 
-    public void setPriceWithWaranty(int priceWithWaranty) {
-        this.priceWithWaranty = priceWithWaranty;
+    public void setwarantyPrice(int warantyPrice) {
+        this.warantyPrice = warantyPrice;
     }
 
     public int getTotalPrice() {
-        return price + priceWithWaranty;
+        return this.totalPrice;
+    }
+
+    public void setWarantyPrice(int warantyPrice) {
+        this.warantyPrice = warantyPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public int getWaranty() {

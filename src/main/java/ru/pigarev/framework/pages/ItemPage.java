@@ -87,7 +87,6 @@ public class ItemPage extends BasePage {
         } else {
             System.out.println(cartCount.getText());
             js.executeScript("arguments[0].click();", buyButton);
-//            System.out.println(cartCount.getAttribute("textContent"));
             wait.until(ExpectedConditions.attributeToBe(cartCount, "textContent", String.valueOf(count + 1)));
         }
         System.out.println(getCount(cartCount));
@@ -104,7 +103,7 @@ public class ItemPage extends BasePage {
     public boolean checkTotalPrice() {
         int totalPrice = 0;
         for (Item item : cartPage.getProdutsInCart()) {
-            totalPrice += item.getPriceWithWaranty();
+            totalPrice += item.getTotalPrice();
         }
         System.out.println(totalPrice);
         System.out.println(Integer.parseInt(cartPrice.getText().replaceAll("\\D+", "")));
