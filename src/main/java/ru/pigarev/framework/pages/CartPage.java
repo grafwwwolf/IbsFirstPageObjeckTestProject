@@ -66,7 +66,6 @@ public class CartPage extends BasePage {
          searchItemInCartListProduct(productName).getWaranty() == checCurrentkWarranty(searchProduct(productName)),
                 "Гарантия не совпадает."
         );
-        System.out.println("-------------- выше проверили совпадение гарантии с заявленной");
         return this;
     }
 
@@ -81,9 +80,7 @@ public class CartPage extends BasePage {
 
     public int checCurrentkWarranty(WebElement element) {
         String warranty = element.findElement(By.xpath("./../../../../../..//span[contains(@class, 'base-ui-radio-button__icon_checked')]")).getText();
-        System.out.println(warranty);
         int warantyInt = Integer.parseInt(warranty.replaceAll("\\D+", ""));
-        System.out.println(warantyInt);
         return warantyInt;
     }
 
@@ -121,9 +118,6 @@ public class CartPage extends BasePage {
         String productName = product.getName();
         int productCount = Integer.parseInt(cartCount.getText());
         totalPriceDeforeDeleting = Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
-        System.out.println(productCount);
-        System.out.println(totalPriceDeforeDeleting);
-
         WebElement deleteProduct = searchProduct(productName).findElement(By.xpath("./../..//button[contains(@class, \"remove-button\")]"));
         waitUtilElementToBeClickable(deleteProduct).click();
         removeFromProdutsInCart(productName);
@@ -175,8 +169,6 @@ public class CartPage extends BasePage {
             wait.until(ExpectedConditions.attributeToBe(cartCount, "textContent", String.valueOf(produtsInCart.size() + 1)));
             produtsInCart.add(new Item(item));
         }
-        System.out.println(checkSum);
-        System.out.println(getCartPrice());
         Assertions.assertTrue(getCartPrice() == checkSum, "Добавление кнопкой не произошло");
         return this;
     }

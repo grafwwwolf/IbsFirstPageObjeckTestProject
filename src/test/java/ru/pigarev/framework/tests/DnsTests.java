@@ -2,7 +2,6 @@ package ru.pigarev.framework.tests;
 
 import org.junit.jupiter.api.Test;
 import ru.pigarev.framework.base_test_class.BaseTest;
-import ru.pigarev.framework.pages.BasePage;
 
 
 public class DnsTests extends BaseTest {
@@ -10,6 +9,7 @@ public class DnsTests extends BaseTest {
 
     @Test
     public void test() {
+
         pageManager.getHomePage().findItemsOnSite("iphone")
         .selectItem(product)
         .getItemPrice()
@@ -28,9 +28,6 @@ public class DnsTests extends BaseTest {
         .assertDeleteFromCart()
         .multyplayProductInCart(product, 2)
         .returnLastDeletedProduct();
-
-
-        BasePage.sleep(5000);
 
     }
 
