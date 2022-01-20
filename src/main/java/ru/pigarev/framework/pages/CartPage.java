@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import ru.pigarev.framework.managers.DriverManager;
 import ru.pigarev.framework.utils.models.Item;
 
 import java.util.ArrayList;
@@ -61,8 +60,14 @@ public class CartPage extends BasePage {
         return h1Title.getText();
     }
 
-    public boolean checkWarranty(String productName) {
-        return searchItemInCartListProduct(productName).getWaranty() == checCurrentkWarranty(searchProduct(productName));
+    public CartPage checkWarranty(Item product) {
+        String productName = product.getName();
+        Assertions.assertTrue(
+         searchItemInCartListProduct(productName).getWaranty() == checCurrentkWarranty(searchProduct(productName)),
+                "Гарантия не совпадает."
+        );
+        System.out.println("-------------- выше проверили совпадение гарантии с заявленной");
+        return this;
     }
 
     public WebElement searchProduct(String productName) {
@@ -96,19 +101,24 @@ public class CartPage extends BasePage {
         return getItemPrice(priceStr);
     }
 
+    public CartPage checkPricesForAllItems() {
+        Assertions.assertTrue(checkPrices(), "Цены в корзине не совпадают с ценами выбранных товаров");
+        return this;
+    }
+
     public boolean checkPrices() {
         for (Item item : produtsInCart) {
-//            getCurrentPrice(searchProduct(item.getName()));
             if (item.getPrice() == getCurrentPrice(searchProduct(item.getName()))) {
                 continue;
             } else {
-                Assertions.fail("Цены в корзине не совпадают с ценами выбранных товаров");
+                return false;
             }
         }
         return true;
     }
 
-    public void deleteFromCart(String productName) {
+    public CartPage deleteFromCart(Item product) {
+        String productName = product.getName();
         int productCount = Integer.parseInt(cartCount.getText());
         totalPriceDeforeDeleting = Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
         System.out.println(productCount);
@@ -126,6 +136,7 @@ public class CartPage extends BasePage {
             wait.until(ExpectedConditions.attributeContains(cartCount, "class", "empty"));
             Assertions.assertTrue(cartCount.getAttribute("class").contains("empty") && produtsInCart.size() == 0, "Удаление товара из корзины не произошло.");
         }
+        return this;
     }
 
     public void removeFromProdutsInCart(String productName) {
@@ -138,7 +149,14 @@ public class CartPage extends BasePage {
         }
     }
 
-    public boolean checkDeleteFromCart(String productName) {
+    public CartPage assertDeleteFromCart() {
+        Assertions.assertTrue(checkDeleteFromCart(),
+                " Удаление Продукта " + deletedItem.getName() + " произошло с ошибкой. Или не поменялась цена, или продукт остался виден в корзине");
+        return this;
+    }
+
+    public boolean checkDeleteFromCart() {
+        String productName = deletedItem.getName();
         int currentCartPrice = Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
         if ((searchProduct(productName) == null) && (currentCartPrice == totalPriceDeforeDeleting - deletedItem.getTotalPrice())) {
             return true;
@@ -147,7 +165,8 @@ public class CartPage extends BasePage {
         }
     }
 
-    public void multyplayProductInCart(String productName, int count) {
+    public CartPage multyplayProductInCart(Item product, int count) {
+        String productName = product.getName();
         Item item = searchItemInCartListProduct(productName);
         int checkSum = (item.getTotalPrice()) * (count + 1);
         WebElement multyplyButton = searchProduct(productName).findElement(By.xpath("./../../../../..//i[contains(@class, \"count-buttons__icon-plus\")]"));
@@ -159,6 +178,7 @@ public class CartPage extends BasePage {
         System.out.println(checkSum);
         System.out.println(getCartPrice());
         Assertions.assertTrue(getCartPrice() == checkSum, "Добавление кнопкой не произошло");
+        return this;
     }
 
     public int getCartPrice() {

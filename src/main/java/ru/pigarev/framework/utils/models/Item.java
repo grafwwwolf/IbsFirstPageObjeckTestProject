@@ -7,12 +7,18 @@ public class Item extends AbstractProduct {
         this.name = name;
     }
 
+
+
     public Item(Item item) {
         this.name = item.name;
         this.price = item.price;
         this.waranty = item.waranty;
         this.warantyPrice = item.warantyPrice;
         this.totalPrice = item.totalPrice;
+    }
+
+    public Item(String name, int price, int waranty, int warantyPrice, int totalPrice) {
+        super(name, price, waranty, warantyPrice, totalPrice);
     }
 
     @Override

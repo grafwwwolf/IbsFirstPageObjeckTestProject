@@ -11,9 +11,10 @@ public class HomePage extends BasePage {
 
 
 
-    public void findItemsOnSite(String item) {
+    public SelectionItemPage findItemsOnSite(String item) {
         fillInputField(searchLine, item);
         searchLine.submit();
         Assertions.assertTrue(driverManager.getDriver().getTitle().contains(item), "Страница не загрузилась");
+        return pageManager.getSelectionItemPage();
     }
 }

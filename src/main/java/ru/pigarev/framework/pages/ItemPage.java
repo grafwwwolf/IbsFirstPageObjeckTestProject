@@ -7,7 +7,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.pigarev.framework.utils.models.Item;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class ItemPage extends BasePage {
@@ -39,13 +38,19 @@ public class ItemPage extends BasePage {
     @FindBy(xpath = "//a[@class=\"ui-link cart-link\"]")
     private WebElement cart;
 
-    public int getItemPrice() {
+    public ItemPage getItemPrice() {
         String strPrice = itemPrice.getText().split("₽")[0];
-        System.out.println(strPrice);
 //        float price = Float.parseFloat(strPrice);
 //        double value = Double.parseDouble(strPrice);
 //        BigDecimal price = new BigDecimal(value).setScale(2);
-        return Integer.parseInt(strPrice.replaceAll("\\D+", ""));
+        int price = Integer.parseInt(strPrice.replaceAll("\\D+", ""));
+        itemManager.getProduct().setPrice(price);
+        itemManager.getProduct().setTotalPrice(price);
+        System.out.println(itemManager.getProduct().getPrice());
+        System.out.println(itemManager.getProduct().getTotalPrice());
+        System.out.println("сверху цена и итоговая стоимость");
+        System.out.println("-----------------");
+        return this;
     }
 
     public ItemPage chooseService(String serviceName) {
@@ -61,16 +66,26 @@ public class ItemPage extends BasePage {
     }
 
     public ItemPage chooseWarranty() {
+        Item product = itemManager.getProduct();
+
+
         waitUtilElementToBeClickable(listWarranty.get(1)).click();
         boolean boolSel = wait.until(ExpectedConditions.elementToBeSelected(listWarranty.get(1).findElement(By.xpath("./../input"))));
-        Assertions.assertTrue(boolSel, "Гарантия не кликнулась");  //почему-то false
+        Assertions.assertTrue(boolSel, "Гарантия не кликнулась");
+        WebElement changeWarantyPrice = itemPrice.findElement(By.xpath("./..//div[@class=\"product-buy__sub\"]"));
+        wait.until(ExpectedConditions.textToBePresentInElement(changeWarantyPrice, "цена изменена"));
 
-
+        product.setTotalPrice(Integer.parseInt(itemPrice.getText().split("₽")[0].replaceAll("\\D+", "")));
+        product.setWarantyPrice(product.getTotalPrice() - product.getPrice());
+        System.out.println(itemManager.getProduct().getPrice());
+        System.out.println(itemManager.getProduct().getwarantyPrice());
+        System.out.println(itemManager.getProduct().getTotalPrice());
+        System.out.println("сверху цена, цена гарантии и итоговая стоимость");
+        System.out.println("-----------------");
 //        if (listWarranty.size() == 1) {
 //            return this;
 //        }
-//
-//        for (WebElement warranty : listWarranty) {
+////        for (WebElement warranty : listWarranty) {
 //            String warrantyStr = warranty.findElement(By.xpath("./span")).getText();
 //            int warrantyInMounth = Integer.parseInt(warrantyStr.split(" ")[0]);
 //        }
@@ -78,8 +93,46 @@ public class ItemPage extends BasePage {
         return this;
     }
 
+    public ItemPage chooseWarrantyImproove() {
+        boolean findWanaty = false;
+        Item product = itemManager.getProduct();
+        int warantyOnSite = 0;
+        int count = 0;
+        for (WebElement element : listWarranty) {
+            if (count == 0) {
+                count++;
+                continue;
+            }
+            System.out.println(element.getText());
+            warantyOnSite = Integer.parseInt(element.getText().replaceAll("\\D+", ""));
+            System.out.println(warantyOnSite);
+            System.out.println(product.getWaranty());
+            if (warantyOnSite == product.getWaranty()) {
+                waitUtilElementToBeClickable(element).click();
+                boolean boolSel = wait.until(ExpectedConditions.elementToBeSelected(element.findElement(By.xpath("./../input"))));
+                Assertions.assertTrue(boolSel, "Гарантия не кликнулась");
+                WebElement changeWarantyPrice = itemPrice.findElement(By.xpath("./..//div[@class=\"product-buy__sub\"]"));
+                wait.until(ExpectedConditions.textToBePresentInElement(changeWarantyPrice, "цена изменена"));
 
-    public void clickBuyButton() {
+                product.setTotalPrice(Integer.parseInt(itemPrice.getText().split("₽")[0].replaceAll("\\D+", "")));
+                product.setWarantyPrice(product.getTotalPrice() - product.getPrice());
+                System.out.println(itemManager.getProduct().getPrice());
+                System.out.println(itemManager.getProduct().getwarantyPrice());
+                System.out.println(itemManager.getProduct().getTotalPrice());
+                System.out.println("сверху цена, цена гарантии и итоговая стоимость");
+                System.out.println("-----------------");
+                findWanaty = true;
+                break;
+            }
+        }
+        Assertions.assertTrue(findWanaty, "Необходимая гарантия для данного продукта отсутствует");
+
+        return this;
+    }
+
+
+    public ItemPage clickBuyButton() {
+        Item product = itemManager.getProduct();
         if (cartCount.getAttribute("class").contains("empty")) {
             System.out.println("корзина пуста");
             js.executeScript("arguments[0].click();", buyButton);
@@ -92,29 +145,43 @@ public class ItemPage extends BasePage {
         System.out.println(getCount(cartCount));
         Assertions.assertTrue(getCount(cartCount) > count, "Кнопка Купить не нажалась");
         count = getCount(cartCount);
+        pageManager.getCartPage().addProduct(new Item(product));
+        itemManager.closeProduct();
+        System.out.println("Печатаем состояние продукты... должно быть нулл");
+        System.out.println(itemManager.getProduct());
+        System.out.println("-----------------");
+        return this;
     }
 
-    public void findItemsOnSite(String item) {
+    public SelectionItemPage findItemsOnSite(String item) {
         fillInputField(searchLine, item);
         searchLine.submit();
         Assertions.assertTrue(driverManager.getDriver().getTitle().contains(item), "Страница не загрузилась");
+        return pageManager.getSelectionItemPage();
     }
 
-    public boolean checkTotalPrice() {
+    public ItemPage checkTotalPrice() {
+        Assertions.assertTrue(checkTotal(), "Цена корзины не совпадает со стоимостью покупок.");
+        return this;
+    }
+
+    public boolean checkTotal() {
         int totalPrice = 0;
-        for (Item item : cartPage.getProdutsInCart()) {
+        for (Item item : pageManager.getCartPage().getProdutsInCart()) {
             totalPrice += item.getTotalPrice();
         }
         System.out.println(totalPrice);
         System.out.println(Integer.parseInt(cartPrice.getText().replaceAll("\\D+", "")));
+        System.out.println("-------- сверху цена в листе и цена корзины----------");
         return totalPrice == Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
+
     }
 
     public CartPage goToCart() {
         waitUtilElementToBeClickable(cart).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[@class=\"cart-title\"]")));
-        Assertions.assertEquals( "Корзина", cartPage.getH1TitleFromCartPage(), "Страница корзины не загрузилась.");
-        return cartPage;
+        Assertions.assertEquals("Корзина", cartPage.getH1TitleFromCartPage(), "Страница корзины не загрузилась.");
+        return pageManager.getCartPage();
     }
 
 }

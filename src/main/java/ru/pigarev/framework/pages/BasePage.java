@@ -8,28 +8,30 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.pigarev.framework.managers.DriverManager;
+import ru.pigarev.framework.managers.ItemManager;
+import ru.pigarev.framework.managers.PageManager;
 
 public class BasePage {
 
     protected final DriverManager driverManager = DriverManager.getInstance();
+    protected PageManager pageManager = PageManager.getInstance();
+    protected ItemManager itemManager = ItemManager.getInstance();
+
+    protected JavascriptExecutor js = (JavascriptExecutor) driverManager.getDriver();
+    protected WebDriverWait wait = new WebDriverWait(driverManager.getDriver(), 10, 1000);
 
     public BasePage() {
         PageFactory.initElements(driverManager.getDriver(), this);
     }
-
-    protected JavascriptExecutor js = (JavascriptExecutor) driverManager.getDriver();
-
-    protected WebDriverWait wait = new WebDriverWait(driverManager.getDriver(), 10, 1000);
-
 
 
     protected WebElement waitUtilElementToBeClickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    protected WebElement waitUtilElementToBeVisible(WebElement element) {
-        return wait.until(ExpectedConditions.visibilityOf(element));
-    }
+//    protected WebElement waitUtilElementToBeVisible(WebElement element) {
+//        return wait.until(ExpectedConditions.visibilityOf(element));
+//    }
 
     protected void scrollToElementJs(WebElement element) {
         js.executeScript("arguments[0].scrollIntoView(true);", element);
@@ -54,10 +56,6 @@ public class BasePage {
         if (element.getText() == null) {
             return 0;
         } else return Integer.parseInt(element.getText());
-    }
-
-    public int textAsInt(WebElement element) {
-        return Integer.parseInt(element.getText().replaceAll("\\D+", ""));
     }
 
     public int getItemPrice(String priceStr) {

@@ -1,18 +1,21 @@
 package ru.pigarev.framework.base_test_class;
 
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import ru.pigarev.framework.managers.DriverManager;
 import ru.pigarev.framework.managers.InitManager;
+import ru.pigarev.framework.managers.PageManager;
+import ru.pigarev.framework.utils.models.Item;
 
 public class BaseTest {
 
     private final DriverManager driverManager = DriverManager.getInstance();
-//    protected WebDriverWait wait;
+    protected PageManager pageManager = PageManager.getInstance();
+
+    protected Item product = new Item("6.1\" Смартфон Apple iPhone 13 128 ГБ черный", 0, 12, 0, 0);
+    protected Item detroit = new Item("Игра Detroit: Стать человеком (PS4)");
 
     @BeforeAll
     public static void beforeAll() {
@@ -23,7 +26,6 @@ public class BaseTest {
     public void beforeEach() {
         String baseUrl = "https://dns-shop.ru";
         driverManager.getDriver().get(baseUrl);
-//        wait = new WebDriverWait(driverManager.getDriver(), 17, 1000);
     }
 
     @AfterEach
@@ -35,39 +37,5 @@ public class BaseTest {
     public static void afterAll() {
         System.out.println("@AfterClass -> afterAll()\n");
     }
-
-
-//    protected WebElement waitUtilElementToBeClickable(WebElement element) {
-//        return wait.until(ExpectedConditions.elementToBeClickable(element));
-//    }
-
-//    protected void scrollToElementJs(WebElement element) {
-//        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driverManager.getDriver();
-//        javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
-//    }
-//
-//    protected void fillInputField(WebElement element, String value) {
-////        scrollToElementJs(element);
-//        waitUtilElementToBeClickable(element);
-//        element.clear();
-//        element.sendKeys(value);
-//        boolean checkFlag = wait.until(ExpectedConditions.attributeContains(element, "value", value));
-//        Assertions.assertTrue(checkFlag, "Поле было заполнено некорректно");
-//
-//    }
-//
-//    protected void checkCorrect(WebElement element) {
-//        WebElement errorInfo = element.findElement(By.xpath("./../../span[@class=\"input__error text--small\"]"));
-//        wait.until(ExpectedConditions.textToBePresentInElement(errorInfo, "Введите корректный адрес электронной почты"));
-//    }
-//
-//    public static void sleep(int millis) {
-//        try {
-//            Thread.sleep(millis);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
 }

@@ -16,6 +16,17 @@ public class AbstractProduct {
         return price;
     }
 
+    public AbstractProduct() {
+    }
+
+    public AbstractProduct(String name, int price, int waranty, int warantyPrice, int totalPrice) {
+        this.name = name;
+        this.price = price;
+        this.waranty = waranty;
+        this.warantyPrice = warantyPrice;
+        this.totalPrice = totalPrice;
+    }
+
     public int getwarantyPrice() {
         return warantyPrice;
     }
