@@ -7,11 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import ru.pigarev.framework.managers.DriverManager;
 import ru.pigarev.framework.managers.InitManager;
 import ru.pigarev.framework.managers.PageManager;
+import ru.pigarev.framework.managers.TestPropManager;
+import ru.pigarev.framework.utils.PropConst;
 import ru.pigarev.framework.utils.models.Item;
 
 public class BaseTest {
 
     private final DriverManager driverManager = DriverManager.getInstance();
+    private TestPropManager propManager = TestPropManager.getInstance();
     protected PageManager pageManager = PageManager.getInstance();
 
     protected Item product = new Item("6.1\" Смартфон Apple iPhone 13 128 ГБ черный", 0, 12, 0, 0);
@@ -24,8 +27,9 @@ public class BaseTest {
 
     @BeforeEach
     public void beforeEach() {
-        String baseUrl = "https://dns-shop.ru";
-        driverManager.getDriver().get(baseUrl);
+//        String baseUrl = "https://dns-shop.ru";
+//        driverManager.getDriver().get(baseUrl);
+        driverManager.getDriver().get(propManager.getProperty(PropConst.BASE_URL));
     }
 
     @AfterEach

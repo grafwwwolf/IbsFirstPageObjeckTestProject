@@ -14,7 +14,6 @@ public class DnsTests extends BaseTest {
         .selectItem(product)
         .getItemPrice()
         .chooseService("Гарантия")
-//        .chooseWarranty()
         .chooseWarrantyImproove()
         .clickBuyButton()
         .findItemsOnSite("detroit")

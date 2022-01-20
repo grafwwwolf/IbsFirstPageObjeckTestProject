@@ -2,11 +2,12 @@ package ru.pigarev.framework.managers;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import ru.pigarev.framework.utils.PropConst;
 
 public class DriverManager {
 
     private static DriverManager driverManager = null;
-
+    private TestPropManager propManager = TestPropManager.getInstance();
     private WebDriver driver;
 
     private DriverManager() {
@@ -27,7 +28,7 @@ public class DriverManager {
     }
 
     private void initDriver() {
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", propManager.getProperty(PropConst.PATH_CHROME_DRIVER_WINDOWS));
         driver = new ChromeDriver();
     }
 
@@ -38,4 +39,4 @@ public class DriverManager {
             driver = null;
         }
     }
-}
+    }
