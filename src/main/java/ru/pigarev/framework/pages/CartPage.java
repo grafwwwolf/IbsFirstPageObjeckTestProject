@@ -1,14 +1,19 @@
 package ru.pigarev.framework.pages;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import ru.pigarev.framework.managers.TestPropManager;
+import ru.pigarev.framework.utils.PropConst;
 import ru.pigarev.framework.utils.models.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CartPage extends BasePage {
 
@@ -60,6 +65,7 @@ public class CartPage extends BasePage {
         return h1Title.getText();
     }
 
+    @Step("Проверяем, что гарантия товара '{product}' в корзине совпадает")
     public CartPage checkWarranty(Item product) {
         String productName = product.getName();
         Assertions.assertTrue(
@@ -78,7 +84,8 @@ public class CartPage extends BasePage {
         return null;
     }
 
-    public int checCurrentkWarranty(WebElement element) {
+    @Step("Промежуточная проверка гарантии в корзине")
+    private int checCurrentkWarranty(WebElement element) {
         String warranty = element.findElement(By.xpath("./../../../../../..//span[contains(@class, 'base-ui-radio-button__icon_checked')]")).getText();
         int warantyInt = Integer.parseInt(warranty.replaceAll("\\D+", ""));
         return warantyInt;
@@ -98,12 +105,14 @@ public class CartPage extends BasePage {
         return getItemPrice(priceStr);
     }
 
+    @Step("Проверяем общую стоимость в корзине и итоговой тоимосью выбранных товаров")
     public CartPage checkPricesForAllItems() {
         Assertions.assertTrue(checkPrices(), "Цены в корзине не совпадают с ценами выбранных товаров");
         return this;
     }
 
-    public boolean checkPrices() {
+    @Step(" Промежуточно проверяем общую стоимость в корзине и итоговой тоимосью выбранных товаров")
+    private boolean checkPrices() {
         for (Item item : produtsInCart) {
             if (item.getPrice() == getCurrentPrice(searchProduct(item.getName()))) {
                 continue;
@@ -114,6 +123,7 @@ public class CartPage extends BasePage {
         return true;
     }
 
+    @Step("Удаляем из корзины товар '{product}' ")
     public CartPage deleteFromCart(Item product) {
         String productName = product.getName();
         int productCount = Integer.parseInt(cartCount.getText());
@@ -143,12 +153,14 @@ public class CartPage extends BasePage {
         }
     }
 
+    @Step("Проверяем, что удаление состоялось - последний товар отсутствует в списке корзины и цена корзины изменась на цену товара")
     public CartPage assertDeleteFromCart() {
         Assertions.assertTrue(checkDeleteFromCart(),
                 " Удаление Продукта " + deletedItem.getName() + " произошло с ошибкой. Или не поменялась цена, или продукт остался виден в корзине");
         return this;
     }
 
+    @Step("Промежуточная проверка удаления товара из корзины")
     public boolean checkDeleteFromCart() {
         String productName = deletedItem.getName();
         int currentCartPrice = Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
@@ -159,6 +171,19 @@ public class CartPage extends BasePage {
         }
     }
 
+    private boolean isExist(By by) {
+        try {
+            driverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+            driverManager.getDriver().findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        } finally {
+            driverManager.getDriver().manage().timeouts().implicitlyWait(Integer.parseInt(TestPropManager.getInstance().getProperty(PropConst.IMPLICITLY_WAIT)), TimeUnit.SECONDS);
+        }
+    }
+
+    @Step("Увеличиваем количество товара '{product}' в корзине на число '{count}' ")
     public CartPage multyplayProductInCart(Item product, int count) {
         String productName = product.getName();
         Item item = searchItemInCartListProduct(productName);
@@ -177,6 +202,7 @@ public class CartPage extends BasePage {
         return Integer.parseInt(cartPrice.getText().replaceAll("\\D+", ""));
     }
 
+    @Step("Возвращаем в корзину последний удаленный из нее товар")
     public void returnLastDeletedProduct() {
         int currentCartPrice = getCartPrice();
         waitUtilElementToBeClickable(returnDeletedProduct).click();

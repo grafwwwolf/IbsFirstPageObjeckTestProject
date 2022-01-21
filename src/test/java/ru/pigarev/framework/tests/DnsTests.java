@@ -1,13 +1,15 @@
 package ru.pigarev.framework.tests;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.pigarev.framework.base_test_class.BaseTest;
+import ru.pigarev.framework.base_test_class.BaseTests;
 
-
-public class DnsTests extends BaseTest {
+@DisplayName("Набор кейсов сайта ДНС")
+public class DnsTests extends BaseTests {
 
 
     @Test
+    @DisplayName("Первый кейс")
     public void test() {
 
         pageManager.getHomePage().findItemsOnSite("iphone")

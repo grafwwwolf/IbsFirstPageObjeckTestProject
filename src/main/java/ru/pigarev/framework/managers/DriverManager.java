@@ -2,6 +2,7 @@ package ru.pigarev.framework.managers;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import ru.pigarev.framework.utils.PropConst;
 
 public class DriverManager {
@@ -29,7 +30,9 @@ public class DriverManager {
 
     private void initDriver() {
         System.setProperty("webdriver.chrome.driver", propManager.getProperty(PropConst.PATH_CHROME_DRIVER_WINDOWS));
-        driver = new ChromeDriver();
+        ChromeOptions ops = new ChromeOptions();
+        ops.addArguments("--disable-notifications");
+        driver = new ChromeDriver(ops);
     }
 
     public void quitDriver() {

@@ -10,7 +10,7 @@ import ru.pigarev.framework.managers.TestPropManager;
 import ru.pigarev.framework.utils.PropConst;
 import ru.pigarev.framework.utils.models.Item;
 
-public class BaseTest {
+public class BaseTests {
 
     private final DriverManager driverManager = DriverManager.getInstance();
     private final TestPropManager propManager = TestPropManager.getInstance();

@@ -1,5 +1,6 @@
 package ru.pigarev.framework.pages;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -38,6 +39,9 @@ public class ItemPage extends BasePage {
     @FindBy(xpath = "//a[@class=\"ui-link cart-link\"]")
     private WebElement cart;
 
+
+
+    @Step("Запоминаем цену и итоговую цену товара")
     public ItemPage getItemPrice() {
         String strPrice = itemPrice.getText().split("₽")[0];
 //        float price = Float.parseFloat(strPrice);
@@ -49,6 +53,7 @@ public class ItemPage extends BasePage {
         return this;
     }
 
+    @Step("Кликаем на подменю '{serviceName}' ")
     public ItemPage chooseService(String serviceName) {
         for (WebElement service : serviceMenu) {
             if (service.getText().contains(serviceName)) {
@@ -78,6 +83,7 @@ public class ItemPage extends BasePage {
 //        return this;
 //    }
 
+    @Step("Кликаем на нужную доп.гарантию. Доп гарантия предустановлена в искомом товаре при создании")
     public ItemPage chooseWarrantyImproove() {
         boolean findWanaty = false;
         Item product = itemManager.getProduct();
@@ -107,6 +113,7 @@ public class ItemPage extends BasePage {
     }
 
 
+    @Step("Кликаем на кнопку 'Купить' ")
     public ItemPage clickBuyButton() {
         Item product = itemManager.getProduct();
         if (cartCount.getAttribute("class").contains("empty")) {
@@ -123,6 +130,7 @@ public class ItemPage extends BasePage {
         return this;
     }
 
+    @Step("Вводим в поисковое поле название искомого товара - '{item}")
     public SelectionItemPage findItemsOnSite(String item) {
         fillInputField(searchLine, item);
         searchLine.submit();
@@ -130,11 +138,13 @@ public class ItemPage extends BasePage {
         return pageManager.getSelectionItemPage();
     }
 
+    @Step("Проверяем, что цена корзины совпадает с общей стоимостью полкупок")
     public ItemPage checkTotalPrice() {
         Assertions.assertTrue(checkTotal(), "Цена корзины не совпадает со стоимостью покупок.");
         return this;
     }
 
+    @Step("Проверяем, что цена корзины совпадает с общей стоимостью полкупок")    // наверное так же
     private boolean checkTotal() {
         int totalPrice = 0;
         for (Item item : pageManager.getCartPage().getProdutsInCart()) {
@@ -144,6 +154,7 @@ public class ItemPage extends BasePage {
 
     }
 
+    @Step("Переходим в корзину")
     public CartPage goToCart() {
         waitUtilElementToBeClickable(cart).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[@class=\"cart-title\"]")));
