@@ -155,8 +155,7 @@ public class CartPage extends BasePage {
 
     @Step("Проверяем, что удаление состоялось - последний товар отсутствует в списке корзины и цена корзины изменась на цену товара")
     public CartPage assertDeleteFromCart() {
-//        Assertions.assertTrue(checkDeleteFromCart(),
-        Assertions.assertTrue(false,
+        Assertions.assertTrue(checkDeleteFromCart(),
                 " Удаление Продукта " + deletedItem.getName() + " произошло с ошибкой. Или не поменялась цена, или продукт остался виден в корзине");
         return this;
     }
