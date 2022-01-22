@@ -18,9 +18,7 @@ public class BaseTests {
     private final DriverManager driverManager = DriverManager.getInstance();
     private final TestPropManager propManager = TestPropManager.getInstance();
     protected PageManager pageManager = PageManager.getInstance();
-
-//    @RegisterExtension
-//    protected MyAllureListener mlistner = new MyAllureListener();
+    
 
     protected Item product = new Item("6.1\" Смартфон Apple iPhone 13 128 ГБ черный", 0, 12, 0, 0);
     protected Item detroit = new Item("Игра Detroit: Стать человеком (PS4)");
