@@ -1,6 +1,6 @@
 package ru.pigarev.framework.utils.listeners;
 
-import io.qameta.allure.Attachment;
+import io.qameta.allure.Allure;
 import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -13,11 +13,12 @@ public class MyAllureListener extends AllureJunit5 implements AfterTestExecution
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
         if (extensionContext.getExecutionException().isPresent()) {
-            getScreenshot();
+            Allure.getLifecycle().addAttachment("Screenshot",  "image/png", "png", getScreenshot());
+
         }
     }
 
-    @Attachment(value = "Screenshot", type = "image/png", fileExtension = "png")
+//    @Attachment(value = "Screenshot", type = "image/png", fileExtension = "png")
     public byte[] getScreenshot() {
         return ((TakesScreenshot) DriverManager.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES);
     }
