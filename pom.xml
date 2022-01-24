@@ -28,6 +28,8 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <aspectj.version>1.9.5</aspectj.version>
+        <tests>firstTest</tests>
+
 
     </properties>
 
@@ -96,11 +98,15 @@
                             <name>listener</name>
                             <value>ru.pigarev.framework.utils.listeners.MyAllureListener</value>
                         </property>
+
                     </properties>
 
                     <systemPropertyVariables>
-                        <allure.results.directory>${project.build.directory}/reports/allure-results</allure.results.directory>
+                        <allure.results.directory>${project.build.directory}/reports/allure-results
+                        </allure.results.directory>
                     </systemPropertyVariables>
+
+                    <groups>${tests}</groups>
 
                 </configuration>
 
@@ -124,15 +130,15 @@
                     <resultsDirectory>${project.build.directory}/reports/allure-results</resultsDirectory>
                     <reportDirectory>${project.build.directory}/reports/allure-reports</reportDirectory>
                 </configuration>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>allure-plugin</id>-->
-<!--                        <phase>install</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>report</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
+                <!--                <executions>-->
+                <!--                    <execution>-->
+                <!--                        <id>allure-plugin</id>-->
+                <!--                        <phase>install</phase>-->
+                <!--                        <goals>-->
+                <!--                            <goal>report</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
             </plugin>
 
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
