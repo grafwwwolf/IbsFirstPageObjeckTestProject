@@ -3,7 +3,12 @@ package ru.pigarev.framework.managers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import ru.pigarev.framework.utils.PropConst;
+
+import java.net.MalformedURLException;
+import java.net.URI;
 
 public class DriverManager {
 
@@ -28,11 +33,25 @@ public class DriverManager {
         return driver;
     }
 
-    private void initDriver() {
-        System.setProperty("webdriver.chrome.driver", propManager.getProperty(PropConst.PATH_CHROME_DRIVER_WINDOWS));
-        ChromeOptions ops = new ChromeOptions();
-        ops.addArguments("--disable-notifications");
-        driver = new ChromeDriver(ops);
+    private void initDriver(){
+//        System.setProperty("webdriver.chrome.driver", propManager.getProperty(PropConst.PATH_CHROME_DRIVER_WINDOWS));
+//        ChromeOptions ops = new ChromeOptions();
+//        ops.addArguments("--disable-notifications");
+//        driver = new ChromeDriver(ops);
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName("chrome");
+        capabilities.setVersion("73.0");
+        capabilities.setCapability("enableVNC", true);
+        capabilities.setCapability("enableVideo", false);
+
+        try {
+            RemoteWebDriver driver = new RemoteWebDriver(
+                    URI.create("http://selenoid.appline.ru:4445/wd/hub").toURL(),
+                    capabilities
+            );
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void quitDriver() {
