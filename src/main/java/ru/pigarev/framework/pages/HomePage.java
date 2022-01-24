@@ -18,12 +18,12 @@ public class HomePage extends BasePage {
 
 @Step("Вводим в поисковое поле название искомого товара - '{item}")
     public SelectionItemPage findItemsOnSite(String item) {
+    logger.info("Выбран товар инфо ");
+    logger.debug("Выбран товар дебаг ");
+    logger.error("Выбран товар еррор ");
         fillInputField(searchLine, item);
         searchLine.submit();
         Assertions.assertTrue(driverManager.getDriver().getTitle().contains(item), "Страница не загрузилась");
-        logger.info("Выбран товар инфо ");
-        logger.debug("Выбран товар дебаг ");
-        logger.error("Выбран товар еррор ");
         return pageManager.getSelectionItemPage();
     }
 }
