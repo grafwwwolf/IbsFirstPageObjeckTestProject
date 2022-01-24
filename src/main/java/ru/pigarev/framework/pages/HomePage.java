@@ -21,9 +21,9 @@ public class HomePage extends BasePage {
         fillInputField(searchLine, item);
         searchLine.submit();
         Assertions.assertTrue(driverManager.getDriver().getTitle().contains(item), "Страница не загрузилась");
-        logger.info("Выбран товар инфо " + item);
-        logger.debug("Выбран товар дебаг " + item);
-        logger.error("Выбран товар еррор " + item);
+        logger.info("Выбран товар инфо ");
+        logger.debug("Выбран товар дебаг ");
+        logger.error("Выбран товар еррор ");
         return pageManager.getSelectionItemPage();
     }
 }
