@@ -40,18 +40,19 @@ public class DriverManager {
 //        driver = new ChromeDriver(ops);
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setBrowserName("chrome");
-        capabilities.setVersion("73.0");
+        capabilities.setVersion("81.0");
         capabilities.setCapability("enableVNC", true);
         capabilities.setCapability("enableVideo", false);
 
         try {
             RemoteWebDriver driver = new RemoteWebDriver(
-                    URI.create("http://selenoid.appline.ru:4445/wd/hub").toURL(),
+                    URI.create("http://selenoid:4444/wd/hub").toURL(),
                     capabilities
             );
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
     }
 
     public void quitDriver() {
