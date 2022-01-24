@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ru.pigarev.framework.base_test_class.BaseTests;
 
+@Tag("All")
 @DisplayName("Набор кейсов сайта ДНС")
 public class DnsTests extends BaseTests {
 
