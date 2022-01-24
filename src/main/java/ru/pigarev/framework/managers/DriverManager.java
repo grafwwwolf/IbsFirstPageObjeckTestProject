@@ -33,7 +33,7 @@ public class DriverManager {
         return driver;
     }
 
-    private void initDriver(){
+    private void initDriver() {
 //        System.setProperty("webdriver.chrome.driver", propManager.getProperty(PropConst.PATH_CHROME_DRIVER_WINDOWS));
 //        ChromeOptions ops = new ChromeOptions();
 //        ops.addArguments("--disable-notifications");
@@ -45,8 +45,8 @@ public class DriverManager {
         capabilities.setCapability("enableVideo", false);
 
         try {
-            RemoteWebDriver driver = new RemoteWebDriver(
-                    URI.create("http://selenoid:4444/wd/hub").toURL(),
+            driver = new RemoteWebDriver(
+                    URI.create("http://164.92.227.174:4444/wd/hub").toURL(),
                     capabilities
             );
         } catch (MalformedURLException e) {
@@ -62,4 +62,4 @@ public class DriverManager {
             driver = null;
         }
     }
-    }
+}
