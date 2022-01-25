@@ -23,7 +23,7 @@ pipeline {
 //                        results: [[path: 'target/reports/allure-results']]
                 allure includeProperties: false,
                         jdk: '',
-                        results: [[path: '/reports/allure-results']]
+                        results: [[path: 'target/reports/allure-results']]
             }
         }
     }
